@@ -1,0 +1,269 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: #f4f5f7;
+  margin: 0;
+  padding: 20px;
+}
+
+.app {
+  width: 100%;
+}
+
+.kanban-board {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.kanban-column {
+  flex: 1;
+  background-color: #ebecf0;
+  border-radius: 8px;
+  padding: 10px;
+  min-height: 400px;
+}
+
+.kanban-column h3 {
+  padding-left: 8px;
+}
+
+/* Feedbacks Visuais */
+.loading-feedback, .error-feedback {
+  font-size: 1.5rem;
+  font-weight: 500;
+  text-align: center;
+  padding: 50px;
+}
+
+.error-feedback {
+  color: red;
+}
+
+
+/* --- Estilos do TaskModal --- */
+
+/* O fundo escuro semi-transparente */
+.modal-overlay {
+  position: fixed; /* Fica fixo na tela */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6); /* Preto com 60% de opacidade */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; /* Garante que fique na frente de tudo */
+}
+
+/* O conteúdo branco do modal (o formulário) */
+.modal-content {
+  background-color: white;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  width: 100%;
+  max-width: 500px; /* Largura máxima do modal */
+  z-index: 1001;
+}
+
+/* Cabeçalho (Título e botão de fechar) */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+}
+
+.modal-title {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.modal-close-button {
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #888;
+}
+
+/* Corpo (Formulário) */
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 95%; /* 95% para não estourar com o padding */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+/* Rodapé (Botões) */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end; /* Alinha botões à direita */
+  gap: 12px;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 16px;
+  margin-top: 24px;
+}
+
+/* Botão Salvar (Azul Escuro, da nossa paleta) */
+.modal-button-save {
+  background-color: #004AAD; /* Nosso azul escuro */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.modal-button-save:hover {
+  background-color: #0A2540; /* Tom mais escuro no hover */
+}
+
+/* Botão Cancelar (Neutro) */
+.modal-button-cancel {
+  background-color: #f0f0f0; /* Cinza claro */
+  color: #333;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.modal-button-cancel:hover {
+  background-color: #e0e0e0;
+}
+
+
+/* --- Estilos do KanbanBoard (Botão +) --- */
+
+.kanban-column-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 8px; /* Espaço para o botão */
+}
+
+/* Nosso botão '+' (conforme sua solicitação) */
+.add-task-button {
+  background-color: #004AAD; /* Nosso azul */
+  color: white;
+  border: none;
+  border-radius: 50%; /* Faz o botão ficar redondo */
+  width: 28px;
+  height: 28px;
+  font-size: 1.5rem; /* Tamanho do '+' */
+  line-height: 28px; /* Centraliza o '+' verticalmente */
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-task-button:hover {
+  background-color: #0A2540; /* Nosso azul mais escuro */
+}
+/* --- Estilos do TaskCard (O "Post-it" 3D) --- */
+
+/* Remove o placeholder antigo, se ainda estiver lá */
+/* .task-card-placeholder { 
+  display: none; 
+} 
+*/
+
+.kanban-column-body {
+  /* Adiciona um padding ao corpo da coluna */
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* Espaço entre os cards */
+}
+
+.task-card {
+  background-color: white;
+  border-radius: 8px; /* Cantos arredondados */
+  padding: 12px 16px;
+  /* O efeito 3D / sombra que você queria */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  border: 1px solid #eee;
+  transition: box-shadow 0.2s ease;
+}
+
+.task-card:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.task-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* Alinha ao topo */
+  margin-bottom: 8px;
+}
+
+.task-card-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  /* Permite que o texto quebre e se adapte */
+  word-wrap: break-word; 
+  width: 80%; /* Deixa espaço para os botões */
+}
+
+.task-card-description {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #555;
+  word-wrap: break-word;
+}
+
+.task-card-buttons {
+  display: flex;
+  gap: 4px;
+}
+
+.task-card-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #888;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.task-card-button:hover {
+  background-color: #f0f0f0; /* Feedback visual no hover */
+  color: #333;
+}
+
+.task-card-button.delete:hover {
+  background-color: #ffebee; /* Vermelho claro no hover do delete */
+  color: #c00;
+}
