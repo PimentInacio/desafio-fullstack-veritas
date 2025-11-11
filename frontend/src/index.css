@@ -267,3 +267,134 @@ body {
   background-color: #ffebee; /* Vermelho claro no hover do delete */
   color: #c00;
 }
+
+/* --- ESTILOS DE POLIMENTO (Layout + Header/Footer) --- */
+
+/* Primeiro, coloque sua imagem de background.
+  Baixe a imagem do Figma ou use o link da que você me enviou.
+  Coloque ela dentro de: /frontend/public/background.jpg 
+*/
+
+body {
+  /* Remove o background cinza que tínhamos antes */
+  background-color: #fff;
+}
+
+/* Layout Principal (Header, Main, Footer) */
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Garante que o app ocupe 100% da altura da tela */
+}
+
+/* Onde o Kanban fica. Esta é a área com o background! */
+.app-main {
+  flex: 1; /* Faz o conteúdo principal crescer e ocupar o espaço */
+  
+  /* --- O BACKGROUND DA PAISAGEM --- */
+  background-image: url('background.jpg'); /* Busca a imagem da pasta /public */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed; /* O background fica fixo durante o scroll */
+  
+  padding: 24px; /* Adiciona um respiro em volta do kanban */
+  
+  /* Faz as colunas do kanban (que são .kanban-board) 
+     não colarem no header/footer */
+  overflow-y: auto; 
+}
+
+/* Estilos do Header */
+.app-header {
+  background-color: white;
+  padding: 0 24px;
+  border-bottom: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  height: 64px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0; /* Impede que o header encolha */
+  z-index: 10; /* Fica na frente do conteúdo */
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.header-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  color: #0A2540; /* Nosso azul */
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-button {
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.header-button:hover {
+  background-color: #e0e0e0;
+}
+
+.user-profile-placeholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #004AAD; /* Nosso azul */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+/* Estilos do Footer */
+.app-footer {
+  background-color: white;
+  text-align: center;
+  padding: 16px;
+  border-top: 1px solid #e0e0e0;
+  flex-shrink: 0; /* Impede que o footer encolha */
+  font-size: 0.9rem;
+  color: #555;
+  z-index: 10;
+}
+
+.app-footer a {
+  color: #004AAD; /* Nosso azul */
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.app-footer a:hover {
+  text-decoration: underline;
+}
+
+/* --- Ajustes Visuais Finais --- */
+
+/* Deixa o fundo da coluna semi-transparente para ver a paisagem */
+.kanban-column {
+  /* Fundo branco com 80% de opacidade */
+  background-color: rgba(255, 255, 255, 0.8);
+  /* Adiciona um "blur" no fundo da coluna (Opcional, mas muito bonito) */
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+}

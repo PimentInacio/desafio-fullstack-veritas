@@ -35,18 +35,20 @@ func main() {
 	// 1. Cria um novo roteador (ServeMux)
 	mux := http.NewServeMux()
 
-	// 2. Registra o nosso handler principal ('handleTasks') na rota "/tasks/"
-	// A barra no final é importante: ela captura /tasks/ e também /tasks/1, /tasks/2, etc.
-	// Envolvemos o 'handleTasks' com nosso 'corsMiddleware'.
+	// 2. Registra o nosso handler principal
 	taskHandler := http.HandlerFunc(handleTasks)
-	mux.Handle("/tasks/", corsMiddleware(taskHandler))
+	mux.Handle("/tasks", taskHandler)
+	mux.Handle("/tasks/", taskHandler)
 
-	// 3. Imprime uma mensagem de log informando que o servidor está pronto
+	// 3. Envolve o roteador com o middleware CORS
+	handler := corsMiddleware(mux)
+
+	// 4. Imprime uma mensagem de log informando que o servidor está pronto
 	log.Println("Iniciando servidor backend na porta :8080...")
-	log.Println("Endpoints disponíveis: GET /tasks, POST /tasks, PUT /tasks/{id}, DELETE /tasks/{id}")
+	log.Println("Endpoints disponíveis: /tasks e /tasks/{id}")
 
-	// 4. Inicia o servidor na porta 8080
-	if err := http.ListenAndServe(":8080", mux); err != nil {
+	// 5. Inicia o servidor na porta 8080 com o handler CORS
+	if err := http.ListenAndServe(":8080", handler); err != nil {
 		log.Fatalf("Erro fatal ao iniciar o servidor: %v", err)
 	}
 }
