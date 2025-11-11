@@ -1,320 +1,82 @@
+/* --- FASE 2: POLIMENTO DE UI PROFISSIONAL --- */
+
+/* 1. SETUP INICIAL E TIPOGRAFIA */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Paleta de Cores */
+  --blue-primary: #0052cc; /* Azul mais vibrante */
+  --blue-dark: #0747a6;
+  --blue-light: #deebff;
+  --text-primary: #172b4d;
+  --text-secondary: #5e6c84;
+  --background-light: #f4f5f7;
+  --background-medium: #ebecf0;
+  --white: #ffffff;
+  --border-light: #dfe1e6;
+  --shadow-soft: rgba(9, 30, 66, 0.08);
+  --shadow-medium: rgba(9, 30, 66, 0.25);
+  
+  /* Cores Semânticas */
+  --green: #36b37e;
+  --yellow: #ffab00;
+  --red: #ff5630;
+
+  /* Design Tokens */
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --shadow-1: 0 1px 2px 0 var(--shadow-soft);
+  --shadow-2: 0 4px 8px -2px var(--shadow-medium);
+  --transition-fast: 0.2s cubic-bezier(0.25, 0.1, 0.25, 1.0);
+}
+
+/* Reset Básico e Estilos Globais */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  background-color: #f4f5f7;
   margin: 0;
-  padding: 20px;
-}
-
-.app {
-  width: 100%;
-}
-
-.kanban-board {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-}
-
-.kanban-column {
-  flex: 1;
-  background-color: #ebecf0;
-  border-radius: 8px;
-  padding: 10px;
-  min-height: 400px;
-}
-
-.kanban-column h3 {
-  padding-left: 8px;
-}
-
-/* Feedbacks Visuais */
-.loading-feedback, .error-feedback {
-  font-size: 1.5rem;
-  font-weight: 500;
-  text-align: center;
-  padding: 50px;
-}
-
-.error-feedback {
-  color: red;
-}
-
-
-/* --- Estilos do TaskModal --- */
-
-/* O fundo escuro semi-transparente */
-.modal-overlay {
-  position: fixed; /* Fica fixo na tela */
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6); /* Preto com 60% de opacidade */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000; /* Garante que fique na frente de tudo */
-}
-
-/* O conteúdo branco do modal (o formulário) */
-.modal-content {
-  background-color: white;
-  padding: 24px;
-  border-radius: 8px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-  width: 100%;
-  max-width: 500px; /* Largura máxima do modal */
-  z-index: 1001;
-}
-
-/* Cabeçalho (Título e botão de fechar) */
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #e0e0e0;
-  padding-bottom: 16px;
-  margin-bottom: 16px;
-}
-
-.modal-title {
-  margin: 0;
-  font-size: 1.5rem;
-}
-
-.modal-close-button {
-  background: transparent;
-  border: none;
-  font-size: 2rem;
-  line-height: 1;
-  cursor: pointer;
-  color: #888;
-}
-
-/* Corpo (Formulário) */
-.modal-body {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.form-group label {
-  font-weight: 600;
-  margin-bottom: 8px;
-}
-
-.form-group input,
-.form-group textarea {
-  width: 95%; /* 95% para não estourar com o padding */
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1rem;
-  font-family: inherit;
-}
-
-/* Rodapé (Botões) */
-.modal-footer {
-  display: flex;
-  justify-content: flex-end; /* Alinha botões à direita */
-  gap: 12px;
-  border-top: 1px solid #e0e0e0;
-  padding-top: 16px;
-  margin-top: 24px;
-}
-
-/* Botão Salvar (Azul Escuro, da nossa paleta) */
-.modal-button-save {
-  background-color: #004AAD; /* Nosso azul escuro */
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 10px 20px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.modal-button-save:hover {
-  background-color: #0A2540; /* Tom mais escuro no hover */
-}
-
-/* Botão Cancelar (Neutro) */
-.modal-button-cancel {
-  background-color: #f0f0f0; /* Cinza claro */
-  color: #333;
-  border: none;
-  border-radius: 4px;
-  padding: 10px 20px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.modal-button-cancel:hover {
-  background-color: #e0e0e0;
-}
-
-
-/* --- Estilos do KanbanBoard (Botão +) --- */
-
-.kanban-column-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-right: 8px; /* Espaço para o botão */
-}
-
-/* Nosso botão '+' (conforme sua solicitação) */
-.add-task-button {
-  background-color: #004AAD; /* Nosso azul */
-  color: white;
-  border: none;
-  border-radius: 50%; /* Faz o botão ficar redondo */
-  width: 28px;
-  height: 28px;
-  font-size: 1.5rem; /* Tamanho do '+' */
-  line-height: 28px; /* Centraliza o '+' verticalmente */
-  cursor: pointer;
   padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background-light);
+  color: var(--text-primary);
 }
 
-.add-task-button:hover {
-  background-color: #0A2540; /* Nosso azul mais escuro */
-}
-/* --- Estilos do TaskCard (O "Post-it" 3D) --- */
-
-/* Remove o placeholder antigo, se ainda estiver lá */
-/* .task-card-placeholder { 
-  display: none; 
-} 
-*/
-
-.kanban-column-body {
-  /* Adiciona um padding ao corpo da coluna */
-  padding: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px; /* Espaço entre os cards */
-}
-
-.task-card {
-  background-color: white;
-  border-radius: 8px; /* Cantos arredondados */
-  padding: 12px 16px;
-  /* O efeito 3D / sombra que você queria */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
-  border: 1px solid #eee;
-  transition: box-shadow 0.2s ease;
-}
-
-.task-card:hover {
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1);
-}
-
-.task-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start; /* Alinha ao topo */
-  margin-bottom: 8px;
-}
-
-.task-card-title {
-  margin: 0;
-  font-size: 1.1rem;
-  font-weight: 600;
-  /* Permite que o texto quebre e se adapte */
-  word-wrap: break-word; 
-  width: 80%; /* Deixa espaço para os botões */
-}
-
-.task-card-description {
-  margin: 0;
-  font-size: 0.9rem;
-  color: #555;
-  word-wrap: break-word;
-}
-
-.task-card-buttons {
-  display: flex;
-  gap: 4px;
-}
-
-.task-card-button {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-size: 1rem;
-  color: #888;
-  padding: 4px;
-  border-radius: 4px;
-}
-
-.task-card-button:hover {
-  background-color: #f0f0f0; /* Feedback visual no hover */
-  color: #333;
-}
-
-.task-card-button.delete:hover {
-  background-color: #ffebee; /* Vermelho claro no hover do delete */
-  color: #c00;
-}
-
-/* --- ESTILOS DE POLIMENTO (Layout + Header/Footer) --- */
-
-/* Primeiro, coloque sua imagem de background.
-  Baixe a imagem do Figma ou use o link da que você me enviou.
-  Coloque ela dentro de: /frontend/public/background.jpg 
-*/
-
-body {
-  /* Remove o background cinza que tínhamos antes */
-  background-color: #fff;
-}
-
-/* Layout Principal (Header, Main, Footer) */
+/* 2. LAYOUT PRINCIPAL */
 .app-layout {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Garante que o app ocupe 100% da altura da tela */
+  min-height: 100vh;
 }
 
-/* Onde o Kanban fica. Esta é a área com o background! */
 .app-main {
-  flex: 1; /* Faz o conteúdo principal crescer e ocupar o espaço */
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  position: relative;
   
-  /* --- O BACKGROUND DA PAISAGEM --- */
-  background-image: url('background.jpg'); /* Busca a imagem da pasta /public */
+  /* Background com gradiente sobre a imagem */
+  background-image: linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.1)), url('background.jpg');
   background-size: cover;
   background-position: center;
-  background-attachment: fixed; /* O background fica fixo durante o scroll */
-  
-  padding: 24px; /* Adiciona um respiro em volta do kanban */
-  
-  /* Faz as colunas do kanban (que são .kanban-board) 
-     não colarem no header/footer */
-  overflow-y: auto; 
+  background-attachment: fixed;
 }
 
-/* Estilos do Header */
+/* 3. HEADER */
 .app-header {
-  background-color: white;
+  background-color: var(--white);
   padding: 0 24px;
-  border-bottom: 1px solid #e0e0e0;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  border-bottom: 1px solid var(--border-light);
+  box-shadow: var(--shadow-1);
   height: 64px;
   display: flex;
   align-items: center;
-  flex-shrink: 0; /* Impede que o header encolha */
-  z-index: 10; /* Fica na frente do conteúdo */
+  flex-shrink: 0;
+  z-index: 10;
 }
 
 .header-content {
@@ -328,7 +90,7 @@ body {
   font-size: 1.5rem;
   font-weight: 600;
   margin: 0;
-  color: #0A2540; /* Nosso azul */
+  color: var(--text-primary);
 }
 
 .header-actions {
@@ -338,47 +100,54 @@ body {
 }
 
 .header-button {
-  background-color: #f0f0f0;
-  border: none;
-  border-radius: 6px;
+  background-color: var(--background-light);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--border-radius-sm);
   padding: 8px 16px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all var(--transition-fast);
 }
 
 .header-button:hover {
-  background-color: #e0e0e0;
+  background-color: var(--background-medium);
+  border-color: var(--blue-primary);
+  color: var(--blue-primary);
 }
 
 .user-profile-placeholder {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: #004AAD; /* Nosso azul */
-  color: white;
+  background-color: var(--blue-primary);
+  color: var(--white);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 1.2rem;
   cursor: pointer;
+  transition: transform var(--transition-fast);
 }
 
-/* Estilos do Footer */
+.user-profile-placeholder:hover {
+    transform: scale(1.1);
+}
+
+/* 4. FOOTER */
 .app-footer {
-  background-color: white;
+  background-color: var(--white);
   text-align: center;
   padding: 16px;
-  border-top: 1px solid #e0e0e0;
-  flex-shrink: 0; /* Impede que o footer encolha */
+  border-top: 1px solid var(--border-light);
+  flex-shrink: 0;
   font-size: 0.9rem;
-  color: #555;
-  z-index: 10;
+  color: var(--text-secondary);
 }
 
 .app-footer a {
-  color: #004AAD; /* Nosso azul */
+  color: var(--blue-primary);
   text-decoration: none;
   font-weight: 600;
 }
@@ -387,14 +156,327 @@ body {
   text-decoration: underline;
 }
 
-/* --- Ajustes Visuais Finais --- */
+/* 5. KANBAN BOARD */
+.kanban-board {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+}
 
-/* Deixa o fundo da coluna semi-transparente para ver a paisagem */
 .kanban-column {
-  /* Fundo branco com 80% de opacidade */
-  background-color: rgba(255, 255, 255, 0.8);
-  /* Adiciona um "blur" no fundo da coluna (Opcional, mas muito bonito) */
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background-color: rgba(244, 245, 247, 0.85); /* Fundo semi-transparente */
+  backdrop-filter: blur(8px);
+  border-radius: var(--border-radius-lg);
+  padding: 16px;
+  max-height: calc(100vh - 160px); /* Altura máxima para habilitar scroll */
+  overflow-y: auto;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: var(--shadow-1);
+  flex: 1; /* Para que as colunas ocupem o espaço igualmente */
+}
+
+/* Custom Scrollbar */
+.kanban-column::-webkit-scrollbar {
+  width: 8px;
+}
+.kanban-column::-webkit-scrollbar-thumb {
+  background-color: var(--border-light);
+  border-radius: 4px;
+}
+.kanban-column::-webkit-scrollbar-thumb:hover {
+  background-color: var(--text-secondary);
+}
+
+.kanban-column-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 8px;
+}
+
+.kanban-column-header h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.add-task-button {
+  background-color: var(--blue-primary);
+  color: var(--white);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 1.8rem;
+  line-height: 32px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.add-task-button:hover {
+  background-color: var(--blue-dark);
+  transform: scale(1.1) rotate(90deg);
+}
+
+.kanban-column-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 6. TASK CARD */
+@keyframes card-fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.task-card {
+  background-color: var(--white);
+  border-radius: var(--border-radius-md);
+  padding: 16px;
+  box-shadow: var(--shadow-1);
+  border-left: 4px solid transparent; /* Para a prioridade */
+  transition: all var(--transition-fast);
+  cursor: grab;
+  animation: card-fade-in 0.3s ease-out;
+}
+
+.task-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-2);
+}
+
+/* Prioridades */
+.task-card[data-priority="high"] { border-left-color: var(--red); }
+.task-card[data-priority="medium"] { border-left-color: var(--yellow); }
+.task-card[data-priority="low"] { border-left-color: var(--green); }
+
+.task-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.task-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  word-wrap: break-word;
+  width: calc(100% - 60px);
+}
+
+.task-card-description {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  word-wrap: break-word;
+  margin: 0;
+}
+
+.task-card-buttons {
+  display: flex;
+  gap: 4px;
+}
+
+.task-card-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--text-secondary);
+  padding: 4px;
+  border-radius: var(--border-radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.task-card-button:hover {
+  background-color: var(--background-medium);
+  color: var(--text-primary);
+}
+
+.task-card-button.delete:hover {
+  background-color: var(--red);
+  color: var(--white);
+}
+
+/* 7. TASK MODAL */
+@keyframes modal-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modal-content-slide-in {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(9, 30, 66, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: modal-fade-in 0.3s ease;
+}
+
+.modal-content {
+  background-color: var(--white);
+  padding: 32px;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-2);
+  width: 100%;
+  max-width: 550px;
+  z-index: 1001;
+  animation: modal-content-slide-in 0.4s cubic-bezier(0.25, 0.1, 0.25, 1.0);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+}
+
+.modal-title {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.modal-close-button {
+  background: transparent;
+  border: none;
+  font-size: 2.5rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.modal-close-button:hover {
+  color: var(--text-primary);
+  transform: rotate(90deg);
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--border-radius-sm);
+  font-size: 1rem;
+  font-family: 'Inter', sans-serif;
+  transition: all var(--transition-fast);
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--blue-primary);
+  box-shadow: 0 0 0 2px var(--blue-light);
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  border-top: 1px solid var(--border-light);
+  padding-top: 24px;
+  margin-top: 32px;
+}
+
+.modal-button-save,
+.modal-button-cancel {
+  border: none;
+  border-radius: var(--border-radius-sm);
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.modal-button-save {
+  background-color: var(--blue-primary);
+  color: var(--white);
+}
+
+.modal-button-save:hover {
+  background-color: var(--blue-dark);
+}
+
+.modal-button-cancel {
+  background-color: var(--background-medium);
+  color: var(--text-secondary);
+}
+
+.modal-button-cancel:hover {
+  background-color: var(--border-light);
+  color: var(--text-primary);
+}
+
+/* 8. RESPONSIVIDADE */
+@media (max-width: 768px) {
+  .app-main {
+    padding: 16px;
+  }
+
+  .kanban-board {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .kanban-column {
+    max-height: none; /* Remove a altura máxima em telas pequenas */
+    flex: none; /* Reseta o flex do desktop */
+    width: 100%; /* Garante que a coluna ocupe a largura total */
+  }
+
+  .header-title {
+    font-size: 1.2rem;
+  }
+
+  .header-button {
+    padding: 6px 10px;
+    font-size: 0.9rem;
+  }
+  
+  .modal-content {
+    padding: 24px;
+    margin: 16px;
+  }
 }

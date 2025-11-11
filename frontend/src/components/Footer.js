@@ -1,23 +1,20 @@
 import React from 'react';
-import KanbanBoard from './components/KanbanBoard';
-import Header from './components/Header'; // 1. Importa o Header
-import Footer from './components/Footer'; // 2. Importa o Footer
-import './index.css';
 
-function App() {
+function Footer() {
   return (
-    // 'app-layout' vai organizar o Header, Main e Footer
-    <div className="app-layout">
-      <Header />
-      
-      {/* 'app-main' é o contêiner do seu background de paisagem */}
-      <main className="app-main">
-        <KanbanBoard />
-      </main>
-      
-      <Footer />
-    </div>
+    <footer className="app-footer">
+      <p>
+        Desenvolvido por Inácio da Silva Mota Pimenta| 
+        <a 
+          href="https://portfolio-inacio.vercel.app" 
+          target="_blank" 
+          rel="noopener noreferrer"
+        >
+          portfolio-inacio.vercel.app
+        </a>
+      </p>
+    </footer>
   );
 }
 
-export default App;
+export default Footer;

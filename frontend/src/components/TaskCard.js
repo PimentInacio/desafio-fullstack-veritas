@@ -3,7 +3,7 @@ import React from 'react';
 // Recebe a tarefa específica (task) e as funções a serem chamadas (onEdit, onDelete)
 function TaskCard({ task, onEdit, onDelete }) {
   return (
-    <div className="task-card">
+    <div className="task-card" data-priority={task.priority || 'low'}>
       <div className="task-card-header">
         <h4 className="task-card-title">{task.title}</h4>
         
