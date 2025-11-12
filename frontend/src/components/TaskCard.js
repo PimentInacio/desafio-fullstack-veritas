@@ -1,32 +1,66 @@
 import React from 'react';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
-// Recebe a tarefa específica (task) e as funções a serem chamadas (onEdit, onDelete)
+// Nosso TaskCard agora usa o hook 'useSortable'
 function TaskCard({ task, onEdit, onDelete }) {
+  
+  // 1. Hook do Dnd-Kit
+  const {
+    attributes, // Propriedades do sensor (ex: onMouseDown)
+    listeners,  // Eventos (ex: onKeyDown para acessibilidade)
+    setNodeRef, // A referência do DOM para o item
+    transform,  // Posição (x, y) durante o arraste
+    transition, // Animação
+    isDragging  // Estado booleano
+  } = useSortable({ id: task.id }); // O ID único da tarefa
+
+  // 2. Estilos para o arraste
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1, // Fica semi-transparente ao arrastar
+    zIndex: isDragging ? 100 : 'auto',
+  };
+
   return (
-    <div className="task-card" data-priority={task.priority || 'low'}>
+    // 3. Aplicamos as props do dnd-kit ao card
+    <div 
+      ref={setNodeRef} 
+      style={style} 
+      className="task-card"
+    >
       <div className="task-card-header">
-        <h4 className="task-card-title">{task.title}</h4>
         
-        {/* Botões de Ação */}
+        {/* 4. O 'attributes' e 'listeners' são aplicados ao título
+            para que ele seja a "alça" de arraste. */}
+        <h4 
+          className="task-card-title" 
+          {...attributes} 
+          {...listeners}
+        >
+          {task.title}
+        </h4>
+        
+        {/* Os botões continuam funcionando normalmente */}
         <div className="task-card-buttons">
           <button 
             className="task-card-button" 
-            onClick={() => onEdit(task)} // Dispara a edição
-            title="Editar Tarefa" // Adiciona o tooltip
+            onClick={() => onEdit(task)}
+            title="Editar Tarefa"
           >
             ✏️
           </button>
           <button 
             className="task-card-button delete" 
-            onClick={() => onDelete(task.id)} // Dispara a exclusão
-            title="Excluir Tarefa" // Adiciona o tooltip
+            onClick={() => onDelete(task.id)}
+            title="Excluir Tarefa"
           >
-            ️
+            🗑️
           </button>
         </div>
       </div>
       
-      {/* Exibe a descrição se ela existir */}
       {task.description && (
         <p className="task-card-description">{task.description}</p>
       )}

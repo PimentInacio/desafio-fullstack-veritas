@@ -161,6 +161,7 @@ body {
   display: flex;
   justify-content: space-between;
   gap: 24px;
+  align-items: flex-start; /* Impede que as colunas estiquem juntas */
 }
 
 .kanban-column {
@@ -479,4 +480,18 @@ body {
     padding: 24px;
     margin: 16px;
   }
+}
+
+/* --- Estilos do Drag and Drop --- */
+
+/* Estiliza o 'clone' flutuante do DragOverlay 
+   para que ele tenha a sombra 3D e o tamanho correto */
+.drag-overlay-card {
+  /* Copia os estilos do .task-card */
+  background-color: white;
+  border-radius: 8px;
+  padding: 12px 16px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), 0 6px 6px rgba(0, 0, 0, 0.23);
+  border: 1px solid #eee;
+  transform: scale(1.05); /* Efeito de 'levantar' */
 }

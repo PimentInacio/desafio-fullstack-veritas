@@ -22,44 +22,41 @@ func writeJSON(w http.ResponseWriter, status int, v any) {
 // Ele decide qual função de lógica chamar com base no Método (GET, POST)
 // ou na presença de um ID na URL (PUT, DELETE).
 func handleTasks(w http.ResponseWriter, r *http.Request) {
-	// Remove a barra inicial e final para facilitar o split
-	path := strings.Trim(r.URL.Path, "/")
-	parts := strings.Split(path, "/") // Ex: ["tasks"] ou ["tasks", "1"]
+	// O roteador do Go (mux) nos envia para este handler em dois casos:
+	// 1. Rota "/tasks": r.URL.Path será "/tasks". Usado para GET (todos) e POST.
+	// 2. Rota "/tasks/": r.URL.Path será o que vem depois, ex: "1" para /tasks/1. Usado para PUT e DELETE.
 
-	// Rota: /tasks
-	if len(parts) == 1 && parts[0] == "tasks" {
+	// Caso 1: A requisição é para a coleção de tarefas
+	if r.URL.Path == "/tasks" {
 		switch r.Method {
 		case http.MethodGet:
 			getTasksHandler(w, r)
 		case http.MethodPost:
 			createTaskHandler(w, r)
 		default:
-			http.Error(w, "Método não permitido", http.StatusMethodNotAllowed)
+			http.Error(w, "Método não permitido para /tasks", http.StatusMethodNotAllowed)
 		}
 		return
 	}
 
-	// Rota: /tasks/{id}
-	if len(parts) == 2 && parts[0] == "tasks" {
-		id, err := strconv.Atoi(parts[1])
-		if err != nil {
-			http.Error(w, "ID inválido", http.StatusBadRequest)
-			return
-		}
-
-		switch r.Method {
-		case http.MethodPut:
-			updateTaskHandler(w, r, id)
-		case http.MethodDelete:
-			deleteTaskHandler(w, r, id)
-		default:
-			http.Error(w, "Método não permitido", http.StatusMethodNotAllowed)
-		}
+	// Caso 2: A requisição é para um item específico.
+	// O prefixo "/tasks/" foi removido pelo roteador, então r.URL.Path é o ID.
+	idString := strings.TrimPrefix(r.URL.Path, "/")
+	id, err := strconv.Atoi(idString)
+	if err != nil {
+		http.Error(w, "ID inválido na URL. Esperado /tasks/{id}", http.StatusBadRequest)
 		return
 	}
 
-	// Se não for nenhuma das rotas acima
-	http.NotFound(w, r)
+	// A rota é /tasks/{id}, então usamos os métodos correspondentes
+	switch r.Method {
+	case http.MethodPut:
+		updateTaskHandler(w, r, id)
+	case http.MethodDelete:
+		deleteTaskHandler(w, r, id)
+	default:
+		http.Error(w, "Método não permitido para /tasks/{id}", http.StatusMethodNotAllowed)
+	}
 }
 
 // getTasksHandler lida com GET /tasks

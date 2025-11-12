@@ -7,17 +7,7 @@ function Header() {
   return (
     <header className="app-header">
       <div className="header-content">
-        <h1 className="header-title">Tarefas de {userName}</h1>
-        
-        <div className="header-actions">
-          <button className="header-button" title="Personalizar Background">
-             Personalizar
-          </button>
-          
-          <div className="user-profile-placeholder" title="Perfil e Sair">
-            {userName.charAt(0)}
-          </div>
-        </div>
+        <h1 className="header-title">Lista de Tarefas</h1>
       </div>
     </header>
   );
