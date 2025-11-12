@@ -4,14 +4,6 @@ import TaskModal from './TaskModal';
 import KanbanColumn from './KanbanColumn';
 import TaskCard from './TaskCard'; // Importa o TaskCard para o DragOverlay
 
-// 1. Imports do Dnd-Kit
-import { 
-  DndContext, 
-  closestCorners, 
-  DragOverlay
-} from '@dnd-kit/core';
-import { arrayMove } from '@dnd-kit/sortable';
-
 const API_URL = 'http://localhost:8080/tasks/';
 
 // 2. IDs das Colunas (Constantes)
@@ -28,10 +20,6 @@ function KanbanBoard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskToEdit, setTaskToEdit] = useState(null);
   const [newStatus, setNewStatus] = useState('');
-
-  // 3. Estado para o Drag and Drop
-  // 'activeTask' armazena a tarefa que está sendo arrastada no momento
-  const [activeTask, setActiveTask] = useState(null); 
 
   useEffect(() => {
     fetchTasks();
@@ -102,78 +90,46 @@ function KanbanBoard() {
     return tasks.filter(task => task.status === status);
   };
   
-  // --- LÓGICA DO DRAG AND DROP ---
+  // --- LÓGICA DE MOVIMENTAÇÃO DE CARTÕES ---
+  const handleMoveTask = (task, direction) => {
+    const columnNamesArray = Object.values(COLUMN_NAMES); // ["A Fazer", "Em Progresso", "Concluídas"]
+    const currentStatusIndex = columnNamesArray.indexOf(task.status);
+    let newStatusIndex = currentStatusIndex;
 
-  // 4. Encontra a tarefa pelo ID
-  const findTaskById = (id) => tasks.find(task => task.id === id);
-
-  // 5. Chamado quando o arraste COMEÇA
-  const handleDragStart = (event) => {
-    const { active } = event;
-    const task = findTaskById(active.id);
-    setActiveTask(task); // Armazena a tarefa ativa no state
-  };
-
-  // 6. Chamado quando o arraste TERMINA
-  const handleDragEnd = (event) => {
-    const { active, over } = event;
-
-    // Se não soltou sobre uma área válida, reseta
-    if (!over) {
-      setActiveTask(null);
-      return;
+    if (direction === 'left' && currentStatusIndex > 0) {
+        newStatusIndex = currentStatusIndex - 1;
+    } else if (direction === 'right' && currentStatusIndex < columnNamesArray.length - 1) {
+        newStatusIndex = currentStatusIndex + 1;
+    } else {
+        // Não pode mover mais nesta direção
+        return;
     }
 
-    const originalTask = findTaskById(active.id);
-    const newStatus = over.id; // O 'id' da coluna (ex: "A Fazer")
+    const newStatus = columnNamesArray[newStatusIndex];
 
-    // Se soltou na mesma coluna
-    if (originalTask.status === newStatus) {
-      // (Opcional: lógica para reordenar dentro da mesma coluna)
-      // Por enquanto, apenas resetamos.
-      setActiveTask(null);
-      return;
-    }
-
-    // --- MUDOU DE COLUNA ---
-
-    // 1. Atualização Otimista (na UI)
-    // Atualiza o state local do React IMEDIATAMENTE para a UI ficar fluida
+    // Atualização Otimista (na UI)
     setTasks(prevTasks => {
-      return prevTasks.map(task => 
-        task.id === originalTask.id 
-          ? { ...task, status: newStatus } 
-          : task
-      );
+        return prevTasks.map(t =>
+            t.id === task.id ? { ...t, status: newStatus } : t
+        );
     });
 
-    // 2. Atualização Persistente (no Backend)
-    // Prepara os dados para a API
-    const updatedTaskData = {
-      ...originalTask,
-      status: newStatus,
-    };
-    
-    // Chama a API PUT para salvar a mudança de status
-    axios.put(`${API_URL}/${originalTask.id}`, updatedTaskData)
-      .then(response => {
-        // Sucesso! O backend confirmou.
-      })
-      .catch(err => {
-        // Erro! Reverte a mudança otimista
-        console.error("Erro ao mover tarefa:", err);
-        alert("Não foi possível mover a tarefa. Revertendo.");
-        setTasks(prevTasks => {
-          return prevTasks.map(task => 
-            task.id === originalTask.id 
-              ? { ...task, status: originalTask.status } // Volta ao status original
-              : task
-          );
+    // Atualização Persistente (no Backend)
+    const updatedTaskData = { ...task, status: newStatus };
+    axios.put(`${API_URL}${task.id}`, updatedTaskData)
+        .then(response => {
+            // Sucesso, nada a fazer pois a atualização otimista já ocorreu
+        })
+        .catch(err => {
+            console.error("Erro ao mover tarefa:", err);
+            alert("Não foi possível mover a tarefa. Revertendo.");
+            // Reverte a atualização otimista
+            setTasks(prevTasks => {
+                return prevTasks.map(t =>
+                    t.id === task.id ? { ...t, status: task.status } : t
+                );
+            });
         });
-      });
-
-    // Limpa a tarefa ativa
-    setActiveTask(null);
   };
   
   // --- RENDERIZAÇÃO ---
@@ -181,13 +137,7 @@ function KanbanBoard() {
   if (error) return <div className="error-feedback">{error}</div>;
 
   return (
-    // 7. Envolvemos tudo no DndContext
-    <DndContext 
-      collisionDetection={closestCorners}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-    >
-      <div className="kanban-board">
+    <div className="kanban-board">
         
         <KanbanColumn
           id={COLUMN_NAMES.DO_TO} // Passa o ID da coluna
@@ -196,6 +146,7 @@ function KanbanBoard() {
           onAddTask={() => openCreateModal(COLUMN_NAMES.DO_TO)}
           onEditTask={openEditModal}
           onDeleteTask={handleDeleteTask}
+          onMoveTask={handleMoveTask}
         />
         
         <KanbanColumn
@@ -205,6 +156,7 @@ function KanbanBoard() {
           onAddTask={() => openCreateModal(COLUMN_NAMES.IN_PROGRESS)}
           onEditTask={openEditModal}
           onDeleteTask={handleDeleteTask}
+          onMoveTask={handleMoveTask}
         />
         
         <KanbanColumn
@@ -214,6 +166,7 @@ function KanbanBoard() {
           onAddTask={() => openCreateModal(COLUMN_NAMES.DONE)}
           onEditTask={openEditModal}
           onDeleteTask={handleDeleteTask}
+          onMoveTask={handleMoveTask}
         />
 
         <TaskModal
@@ -223,21 +176,7 @@ function KanbanBoard() {
           taskToEdit={taskToEdit}
           status={newStatus}
         />
-        
-        {/* 8. DragOverlay (Opcional, mas profissional)
-           Renderiza o 'card flutuante' enquanto arrastamos */}
-        <DragOverlay>
-          {activeTask ? (
-            <TaskCard 
-              task={activeTask} 
-              onEdit={() => {}} 
-              onDelete={() => {}} 
-            />
-          ) : null}
-        </DragOverlay>
-
       </div>
-    </DndContext>
   );
 }
 

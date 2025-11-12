@@ -36,3 +36,41 @@
     transform: rotate(360deg);
   }
 }
+
+/* Styles for TaskCard move buttons */
+.task-card-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.move-button {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 1.2em;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.move-button:hover:not(:disabled) {
+  background-color: #e0e0e0;
+}
+
+.move-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Adjust existing edit/delete buttons to fit */
+.task-card-buttons {
+  display: flex;
+  gap: 5px; /* Space between edit/delete */
+}
+
+.task-card-button {
+  /* Existing styles */
+  padding: 5px 8px; /* Adjust padding if needed */
+}
