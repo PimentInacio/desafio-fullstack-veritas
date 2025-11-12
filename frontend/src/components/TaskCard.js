@@ -11,30 +11,34 @@ function TaskCard({ task, onEdit, onDelete, onMoveTask, currentColumnStatus }) {
 
   return (
     <div className="task-card">
-      <div className="task-card-header">
-        <h4 className="task-card-title">{task.title}</h4>
-      </div>
+      <h4 className="task-card-title">{task.title}</h4>
       
       {task.description && (
         <p className="task-card-description">{task.description}</p>
       )}
 
-      <div className="task-card-actions">
+      <div className="task-card-actions-container">
         <button
             onClick={() => onMoveTask(task, 'left')}
             disabled={currentColumnIndex === 0}
-            className="move-button left-arrow"
+            className="task-action-button move-left"
+            title="Mover para a esquerda"
         >
-            ←
+            ◀️
         </button>
-        <button onClick={() => onEdit(task)} className="edit-button">Editar</button>
-        <button onClick={() => onDelete(task.id)} className="delete-button">Excluir</button>
         <button
             onClick={() => onMoveTask(task, 'right')}
             disabled={currentColumnIndex === columnNamesArray.length - 1}
-            className="move-button right-arrow"
+            className="task-action-button move-right"
+            title="Mover para a direita"
         >
-            →
+            ▶️
+        </button>
+        <button onClick={() => onEdit(task)} className="task-action-button edit" title="Editar Tarefa">
+          ✏️
+        </button>
+        <button onClick={() => onDelete(task.id)} className="task-action-button delete" title="Excluir Tarefa">
+          🗑️
         </button>
       </div>
     </div>
