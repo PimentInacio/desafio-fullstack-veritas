@@ -22,27 +22,26 @@ func writeJSON(w http.ResponseWriter, status int, v any) {
 // Ele decide qual função de lógica chamar com base no Método (GET, POST)
 // ou na presença de um ID na URL (PUT, DELETE).
 func handleTasks(w http.ResponseWriter, r *http.Request) {
-	// O roteador do Go (mux) nos envia para este handler em dois casos:
-	// 1. Rota "/tasks": r.URL.Path será "/tasks". Usado para GET (todos) e POST.
-	// 2. Rota "/tasks/": r.URL.Path será o que vem depois, ex: "1" para /tasks/1. Usado para PUT e DELETE.
+	// O roteador padrão do Go não remove o prefixo da rota. Fazemos isso manualmente.
+	// Para uma requisição a "/tasks/1", o resultado de path será "1".
+	// Para uma requisição a "/tasks/", o resultado de path será "".
+	path := strings.TrimPrefix(r.URL.Path, "/tasks/")
 
-	// Caso 1: A requisição é para a coleção de tarefas
-	if r.URL.Path == "/tasks" {
+	// Caso 1: A requisição é para a coleção de tarefas (path resultante é vazio)
+	if path == "" {
 		switch r.Method {
 		case http.MethodGet:
 			getTasksHandler(w, r)
 		case http.MethodPost:
 			createTaskHandler(w, r)
 		default:
-			http.Error(w, "Método não permitido para /tasks", http.StatusMethodNotAllowed)
+			http.Error(w, "Método não permitido para /tasks/", http.StatusMethodNotAllowed)
 		}
 		return
 	}
 
-	// Caso 2: A requisição é para um item específico.
-	// O prefixo "/tasks/" foi removido pelo roteador, então r.URL.Path é o ID.
-	idString := strings.TrimPrefix(r.URL.Path, "/")
-	id, err := strconv.Atoi(idString)
+	// Caso 2: A requisição é para um item específico (path resultante é o ID)
+	id, err := strconv.Atoi(path)
 	if err != nil {
 		http.Error(w, "ID inválido na URL. Esperado /tasks/{id}", http.StatusBadRequest)
 		return

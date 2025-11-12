@@ -12,7 +12,7 @@ import {
 } from '@dnd-kit/core';
 import { arrayMove } from '@dnd-kit/sortable';
 
-const API_URL = 'http://localhost:8080/tasks';
+const API_URL = 'http://localhost:8080/tasks/';
 
 // 2. IDs das Colunas (Constantes)
 const COLUMN_NAMES = {
@@ -54,7 +54,7 @@ function KanbanBoard() {
 
   const handleSaveTask = (taskData) => {
     if (taskData.id) { // ATUALIZAÇÃO (PUT)
-      axios.put(`${API_URL}/${taskData.id}`, taskData)
+      axios.put(`${API_URL}${taskData.id}`, taskData)
         .then(response => {
           setTasks(prevTasks => prevTasks.map(task =>
             task.id === taskData.id ? response.data : task
@@ -73,7 +73,7 @@ function KanbanBoard() {
   };
 
   const handleDeleteTask = (id) => {
-    axios.delete(`${API_URL}/${id}`)
+    axios.delete(`${API_URL}${id}`)
       .then(() => {
         setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
       })

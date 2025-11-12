@@ -35,9 +35,10 @@ func main() {
 	// 1. Cria um novo roteador (ServeMux)
 	mux := http.NewServeMux()
 
-	// 2. Registra o nosso handler principal
+	// 2. Registra o nosso handler principal de forma unificada.
+	//    Agora, apenas /tasks/ é registrado. Isso significa que todas as requisições
+	//    devem terminar com uma barra ou ter algo depois (como /tasks/1).
 	taskHandler := http.HandlerFunc(handleTasks)
-	mux.Handle("/tasks", taskHandler)
 	mux.Handle("/tasks/", taskHandler)
 
 	// 3. Envolve o roteador com o middleware CORS
